@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="Kuro">
+        <createTable tableName="original_character">
+            <column name="character_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)"/>
+            <column name="age" type="integer"/>
+            <column name="gender" type="varchar(50)"/>
+            <column name="description" type="text"/>
+            <column name="avatar_url" type="varchar(512)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
