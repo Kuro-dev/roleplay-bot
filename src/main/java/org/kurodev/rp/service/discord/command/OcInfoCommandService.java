@@ -42,13 +42,18 @@ public class OcInfoCommandService extends DiscordCommand {
             User creator = event.getJDA().retrieveUserById(character.getUserId()).complete();
             EmbedBuilder embed = new EmbedBuilder()
                     .setTitle("Character Information")
+                    .addField("ID", String.valueOf(character.getCharacterId()), true)
                     .addField("Name", character.getName(), true)
+                    .addBlankField(false)
                     .addField("Gender", character.getGender(), true)
                     .addField("Age", String.valueOf(character.getAge()), true)
-                    .setImage(character.getAvatarUrl())
-                    .addField("Description", character.getDescription(), false)
+                    .addBlankField(false)
+                    .addField("Description", character.getBackstory(), false)
                     .setFooter("Author: " + creator.getName(), creator.getAvatarUrl())
                     .setColor(Color.MAGENTA);
+
+            if (character.getAvatarUrl() != null && !character.getAvatarUrl().isBlank())
+                embed.setImage(character.getAvatarUrl());
 
             event.replyEmbeds(embed.build())
                     .setEphemeral(true)

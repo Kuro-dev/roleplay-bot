@@ -24,8 +24,17 @@ public class OcListCommandService extends DiscordCommand {
 
     @Override
     protected void executeCommand(@NotNull SlashCommandInteractionEvent event) {
+        var result = repository.findAllByUserId(event.getUser().getIdLong());
+
+        if (result.isEmpty()) {
+            event.reply("You don't have any characters yet")
+                    .setEphemeral(true)
+                    .queue();
+            return;
+        }
+
         StringBuilder reply = new StringBuilder("Here are all your Characters:\n");
-        repository.findAllByUserId(event.getUser().getIdLong()).forEach(c -> {
+        result.forEach(c -> {
             reply.append("* ").append(c.getName()).append("\n");
         });
         event.reply(reply.toString())

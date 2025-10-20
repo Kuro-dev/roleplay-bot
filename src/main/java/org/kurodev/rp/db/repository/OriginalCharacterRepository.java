@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface OriginalCharacterRepository extends JpaRepository<OriginalCharacter, Long> {
     List<OriginalCharacter> findAllByUserId(Long userId);
 
+    Optional<OriginalCharacter> findByCharacterIdAndUserId(Long id, Long userId);
+
     @Query("SELECT c FROM OriginalCharacter c " +
             "WHERE c.userId = :userId AND " +
             "LOWER(c.name) LIKE LOWER(CONCAT('%', :name, '%'))")

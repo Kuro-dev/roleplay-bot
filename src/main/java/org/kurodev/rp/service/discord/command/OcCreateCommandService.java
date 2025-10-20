@@ -18,10 +18,10 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class CreateOcCommandService extends DiscordCommand {
+public class OcCreateCommandService extends DiscordCommand {
     private final OriginalCharacterRepository repository;
 
-    public CreateOcCommandService(OriginalCharacterRepository repository) {
+    public OcCreateCommandService(OriginalCharacterRepository repository) {
         super("oc-create");
         this.repository = repository;
     }
@@ -50,7 +50,7 @@ public class CreateOcCommandService extends DiscordCommand {
                 .setPlaceholder("https://example.com/avatar.png")
                 .build();
 
-        TextInput descriptionInput = TextInput.create("description", TextInputStyle.PARAGRAPH)
+        TextInput backstoryInput = TextInput.create("backstory", TextInputStyle.PARAGRAPH)
                 .setRequired(true)
                 .build();
 
@@ -60,7 +60,7 @@ public class CreateOcCommandService extends DiscordCommand {
                         Label.of("Age", ageInput),
                         Label.of("Gender", genderInput),
                         Label.of("Avatar Url", "URL of your avatar.", avatarInput),
-                        Label.of("Description", descriptionInput)
+                        Label.of("Backstory", backstoryInput)
                 )
                 .build();
     }
@@ -78,7 +78,7 @@ public class CreateOcCommandService extends DiscordCommand {
             oc.name(event.getValue("name").getAsString());
             oc.gender(event.getValue("gender") != null ? event.getValue("gender").getAsString() : "Undefined");
             oc.avatarUrl(event.getValue("avatarUrl") != null ? event.getValue("avatarUrl").getAsString() : null);
-            oc.description(event.getValue("description").getAsString());
+            oc.backstory(event.getValue("backstory").getAsString());
             oc.userId(event.getUser().getIdLong());
 
             OriginalCharacter chara = repository.save(oc.build());
