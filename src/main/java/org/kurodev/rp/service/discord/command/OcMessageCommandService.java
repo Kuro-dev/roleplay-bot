@@ -11,7 +11,6 @@ import org.kurodev.rp.db.repository.OriginalCharacterRepository;
 import org.kurodev.rp.service.discord.DiscordCommand;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +48,11 @@ public class OcMessageCommandService extends DiscordCommand {
         }
 
         EmbedBuilder embed = new EmbedBuilder()
-                .setTitle(character.get().getName())
-                .setColor(Color.MAGENTA);
+                .setTitle(character.get().getName());
+
+        if (character.get().getColor() != null) {
+            embed.setColor(character.get().getColor());
+        }
 
         if (character.get().getAvatarUrl() != null && !character.get().getAvatarUrl().isBlank()) {
             embed.setThumbnail(character.get().getAvatarUrl());

@@ -2,7 +2,8 @@ package org.kurodev.rp.db.util;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
-import java.awt.Color;
+
+import java.awt.*;
 
 @Converter(autoApply = true)
 public class ColorConverter implements AttributeConverter<Color, String> {

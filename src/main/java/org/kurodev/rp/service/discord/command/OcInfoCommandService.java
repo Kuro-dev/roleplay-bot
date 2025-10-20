@@ -13,7 +13,6 @@ import org.kurodev.rp.db.repository.OriginalCharacterRepository;
 import org.kurodev.rp.service.discord.DiscordCommand;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +48,10 @@ public class OcInfoCommandService extends DiscordCommand {
                     .addField("Age", String.valueOf(character.getAge()), true)
                     .addBlankField(false)
                     .addField("Description", character.getBackstory(), false)
-                    .setFooter("Author: " + creator.getName(), creator.getAvatarUrl())
-                    .setColor(Color.MAGENTA);
+                    .setFooter("Author: " + creator.getName(), creator.getAvatarUrl());
+            if (character.getColor() != null) {
+                embed.setColor(character.getColor());
+            }
 
             if (character.getAvatarUrl() != null && !character.getAvatarUrl().isBlank())
                 embed.setImage(character.getAvatarUrl());
