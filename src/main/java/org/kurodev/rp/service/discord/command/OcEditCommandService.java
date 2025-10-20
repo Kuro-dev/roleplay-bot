@@ -41,8 +41,8 @@ public class OcEditCommandService extends DiscordCommand {
         cmd.addOption(OptionType.STRING, "gender", "Change the gender of the character", false);
         cmd.addOption(OptionType.INTEGER, "age", "Change the age of the character", false);
         cmd.addOption(OptionType.STRING, "avatar-url", "Change the avatar url of the character", false);
-        cmd.addOption(OptionType.STRING, "color", "Change the favourite color of the character", false, true);
-        cmd.addOption(OptionType.BOOLEAN, "description", "Change the description of the character (opens a modal)", false);
+        cmd.addOption(OptionType.STRING, "color", "Change the favourite color of the character. (can be a hex code)", false, true);
+        cmd.addOption(OptionType.BOOLEAN, "description", "Change the description of the character (opens a modal if set to `true`)", false);
     }
 
     @Override
@@ -126,6 +126,7 @@ public class OcEditCommandService extends DiscordCommand {
                 String query = event.getFocusedOption().getValue();
                 List<Command.Choice> choices = repository.findAllByUserId(event.getUser().getIdLong()).stream()
                         .filter(c -> query.isBlank() || String.valueOf(c.getCharacterId()).contains(query))
+                        .limit(25)
                         .map(c -> new Command.Choice(c.getName(), c.getCharacterId())).toList();
                 event.replyChoices(choices).queue();
             }

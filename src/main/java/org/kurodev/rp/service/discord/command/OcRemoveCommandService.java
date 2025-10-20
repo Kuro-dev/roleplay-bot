@@ -60,6 +60,7 @@ public class OcRemoveCommandService extends DiscordCommand {
             List<OriginalCharacter> suggestions = repository.findByUserIdAndNameLike(event.getUser().getIdLong(), query);
             event.replyChoiceStrings(
                     suggestions.stream()
+                            .limit(25)
                             .map(OriginalCharacter::getName)
                             .toList()
             ).queue();

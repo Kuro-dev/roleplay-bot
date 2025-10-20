@@ -47,7 +47,7 @@ public class OcInfoCommandService extends DiscordCommand {
                     .addField("Gender", character.getGender(), true)
                     .addField("Age", String.valueOf(character.getAge()), true)
                     .addBlankField(false)
-                    .addField("Description", character.getBackstory(), false)
+                    .addField("Backstory", character.getBackstory(), false)
                     .setFooter("Author: " + creator.getName(), creator.getAvatarUrl());
             if (character.getColor() != null) {
                 embed.setColor(character.getColor());
@@ -87,7 +87,7 @@ public class OcInfoCommandService extends DiscordCommand {
 
                         });
             }
-            event.replyChoices(choices).queue();
+            event.replyChoices(choices.subList(0, Math.min(25, choices.size()))).queue();
         }
     }
 }

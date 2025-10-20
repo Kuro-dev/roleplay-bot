@@ -83,7 +83,10 @@ public class OcCreateCommandService extends DiscordCommand {
 
             OriginalCharacter chara = repository.save(oc.build());
             log.info("User {} Successfully created a new OC: {}", event.getUser().getName(), chara.getName());
-            event.reply("Character created!").setEphemeral(true).queue();
+            event.reply("Character created! " +
+                    "Use `/oc-edit` to modify your character or change their color")
+                    .setEphemeral(true)
+                    .queue();
         }
     }
 
