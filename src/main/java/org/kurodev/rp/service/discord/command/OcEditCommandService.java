@@ -102,12 +102,8 @@ public class OcEditCommandService extends DiscordCommand {
                 event.reply("Character edited successfully")
                         .setEphemeral(true)
                         .queue();
-                return;
             }
         }
-        event.reply("Character edit failed. Please try again later")
-                .setEphemeral(true)
-                .queue();
     }
 
     private Color getColor(String color) {

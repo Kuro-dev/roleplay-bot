@@ -4,7 +4,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.kurodev.rp.cfg.ProjectSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,14 @@ public class DiscordService extends ListenerAdapter {
     private final List<DiscordCommand> commands;
 
 
-    public DiscordService(@Value("${discord.token}") String token, List<DiscordCommand> commands) {
-        jda = JDABuilder.createDefault(token).build();
+    public DiscordService(@Value("${discord.token}") String token, List<DiscordCommand> commands, ProjectSettings project) {
+        log.info("Starting {} - {}", project.name(), project.version());
+        jda = JDABuilder.createDefault(token)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT,
+                        GatewayIntent.GUILD_MESSAGES,
+                        GatewayIntent.GUILD_MEMBERS)
+                .build();
+        jda.getGuilds().forEach(Guild::loadMembers);
         this.commands = commands;
     }
 

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Service
 public class OcInfoCommandService extends DiscordCommand {
-    private OriginalCharacterRepository repository;
+    private final OriginalCharacterRepository repository;
 
     public OcInfoCommandService(OriginalCharacterRepository repository) {
         super("oc-info");
@@ -72,20 +72,27 @@ public class OcInfoCommandService extends DiscordCommand {
             String query = event.getFocusedOption().getValue();
             List<Command.Choice> choices = new ArrayList<>();
             repository.findByUserIdAndNameLike(event.getUser().getIdLong(), query)
-                    .forEach(suggestion -> choices.add(new Command.Choice("(you)" + suggestion.getName(), suggestion.getCharacterId())));
+                    .forEach(suggestion -> choices.add(new Command.Choice("(you) - " + suggestion.getName(), suggestion.getCharacterId())));
 
-            if (event.isGuildCommand()) {
-                event.getGuild().getMembers()
-                        .parallelStream()
-                        .forEach(member -> {
-                            repository.findAllByUserId(member.getIdLong())
-                                    .stream().filter(originalCharacter -> originalCharacter.getName().contains(query))
-                                    .forEach(originalCharacter -> {
-                                        var choice = new Command.Choice("(" + member.getNickname() + ")" + originalCharacter.getName(), originalCharacter.getCharacterId());
-                                        choices.add(choice);
-                                    });
+            if (event.isFromGuild()) {
+                var creators = repository.findAll().parallelStream()
+                        .map(oc -> oc.getUserId()).toList();
 
-                        });
+                event.getGuild().retrieveMembersByIds(creators).onSuccess(members -> {
+                    members.parallelStream()
+                            .filter(member -> member.getUser().getIdLong() != event.getUser().getIdLong())
+                            .forEach(member -> {
+                                repository.findAllByUserId(member.getIdLong())
+                                        .stream()
+                                        .filter(originalCharacter -> originalCharacter.getName().contains(query))
+                                        .forEach(originalCharacter -> {
+                                            var choice = new Command.Choice("(" + member.getEffectiveName() + ") - " + originalCharacter.getName(), originalCharacter.getCharacterId());
+                                            choices.add(choice);
+                                        });
+                            });
+                    event.replyChoices(choices.subList(0, Math.min(25, choices.size()))).queue();
+                });
+                return;
             }
             event.replyChoices(choices.subList(0, Math.min(25, choices.size()))).queue();
         }
